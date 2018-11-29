@@ -75,11 +75,20 @@ class App extends Component {
     ]
   }
 
+  manageMessages = (e) => {
+    console.log('event.className in manageMessages',e.target.className);
+    if (e.target.className === 'star fa fa-star-o') {
+      console.log('im a star!');
+    }
+    console.log("event.value in manageMessages",e.target.value);
+  }
+
+
   render() {
 
     return (<div className="App">
-      <Toolbar messages={this.state.messages}/>
-      <MessageList messages={this.state.messages} />
+      <Toolbar messages={this.state.messages} />
+      <MessageList messages={this.state.messages} manageMessages={ this.manageMessages } />
     </div>)
   }
 }

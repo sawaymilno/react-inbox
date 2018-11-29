@@ -79,26 +79,49 @@ class App extends Component {
 }
 
   manageMessages = (e) => {
-    let starId = parseInt(e.target.dataset.star)
-    let value
-    console.log('e.target.dataset',e.target.dataset);
-    if (e.target.className === "star fa fa-star") {
-      value = true
-      } else {
-      value = false
+    let modifiedMessages
+
+    let toggleStar = () => {
+      let starId = parseInt(e.target.dataset.star)
+      let value
+      console.log('e.target.dataset.name',e.target.dataset.name);
+      if (e.target.className === "star fa fa-star") {
+        value = true
+        } else {
+        value = false
+      }
+      //console.log('[0]starred before',this.state.messages[0].starred);
+      modifiedMessages = this.state.messages.map((msg) => {
+        if (msg.id === starId) {
+          msg.starred = !value
+        }
+        return msg
+      })
+    }
+    // let toggleReadSelected = () => {
+    //   let rowStyle = parseInt(e.target.dataset.rowStyle)
+    //   let read
+    //   let selected
+    //   console.log('e.target.dataset.name',e.target.dataset.name);
+    //   if (rowStyle === "row message read selected") {
+    //     value = 'true'
+    //     } else {
+    //     value = false
+    //   }
+    //   //console.log('[0]starred before',this.state.messages[0].starred);
+    //   modifiedMessages = this.state.messages.map((msg) => {
+    //     if (msg.id === starId) {
+    //       msg.starred = !value
+    //     }
+    //     return msg
+    //   })
+    // }
+
+    if (e.target.dataset.name === "starred") {
+      toggleStar()
     }
 
-    //console.log('[0]starred before',this.state.messages[0].starred);
-
-    let modifiedMessages = this.state.messages.map((msg) => {
-      if (msg.id === starId) {
-        msg.starred = !value
-      }
-      return msg
-    })
-
     //console.log('modifiedMessages[0].starred',modifiedMessages[0].starred);
-
     this.setState({modifiedMessages})
   }
 

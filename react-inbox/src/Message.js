@@ -19,21 +19,21 @@ const Message = ({ id, subject, read, starred, selected, labels, body, manageMes
    }
 
   return (
-    <div id={id} className={rowStyle}  >
+    <div data-id={id} className={rowStyle}  >
       <div className="col-xs-1">
         <div className="row">
           <div className="col-xs-2">
-            <input type="checkbox" checked={ selected } onChange={ onClick }/>
+            <input data-checked={id} type="checkbox" checked={ selected } onChange={ onClick }/>
           </div>
           <div className="col-xs-2">
-            <i className={ starred ? "star fa fa-star" : "star fa fa-star-o" }></i>
+            <i data-star={id} className={ starred ? "star fa fa-star" : "star fa fa-star-o" } onClick={ onClick } ></i>
           </div>
         </div>
       </div>
       <div className="col-xs-11">
-        <span className="label label-warning">{ labels[0] }</span>
-    <span className="label label-warning">{ labels[1] }</span>
-        <a href="#">
+        <span data-label1={id} className="label label-warning">{ labels[0] }</span>
+    <span data-label2={id} className="label label-warning">{ labels[1] }</span>
+        <a data-subject={id} href="#">
           {subject}
         </a>
       </div>

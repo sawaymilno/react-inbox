@@ -7,7 +7,9 @@ import MessageList from './MessageList'
 
 class App extends Component {
 
-  state = {
+  constructor(props) {
+    super(props);
+    this.state = {
     messages:[
       {
         subject: "You can't input the protocol without calculating the mobile RSS protocol!",
@@ -74,15 +76,31 @@ class App extends Component {
       }
     ]
   }
+}
 
   manageMessages = (e) => {
-    console.log('event.className in manageMessages',e.target.className);
-    if (e.target.className === 'star fa fa-star-o') {
-      console.log('im a star!');
+    let starId = parseInt(e.target.dataset.star)
+    let value
+    console.log('e.target.dataset',e.target.dataset);
+    if (e.target.className === "star fa fa-star") {
+      value = true
+      } else {
+      value = false
     }
-    console.log("event.value in manageMessages",e.target.value);
-  }
 
+    //console.log('[0]starred before',this.state.messages[0].starred);
+
+    let modifiedMessages = this.state.messages.map((msg) => {
+      if (msg.id === starId) {
+        msg.starred = !value
+      }
+      return msg
+    })
+
+    //console.log('modifiedMessages[0].starred',modifiedMessages[0].starred);
+
+    this.setState({modifiedMessages})
+  }
 
   render() {
 

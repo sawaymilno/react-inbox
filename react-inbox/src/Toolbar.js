@@ -37,11 +37,11 @@ const Toolbar = (props) => {
         <i className={checkButtonStyle} data-name="checkAll"></i>
       </button>
 
-      <button className="btn btn-default" disabled={disabled}>
+      <button className="btn btn-default" data-name="markRead" disabled={disabled}>
         Mark As Read
       </button>
 
-      <button className="btn btn-default" disabled={disabled}>
+      <button className="btn btn-default" data-name="markUnread" disabled={disabled}>
         Mark As Unread
       </button>
 

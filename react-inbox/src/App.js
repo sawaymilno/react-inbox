@@ -125,9 +125,9 @@ class App extends Component {
   }
 
   manageToolbar = (e) => {
-    console.log(e.target.dataset.name);
-
+    let dataName = e.target.dataset.name
     let modifiedMessages
+    console.log(dataName);
 
     let toggleCheckAll = () => {
       //let checkAllId = parseInt(e.target.dataset.checkAll)
@@ -143,11 +143,26 @@ class App extends Component {
         return msg
       })
     }
+    let readUnread = () => {
+      let dataName = e.target.dataset.name
+      let checkedStatus = this.state.messages.map((message) => (message.selected))
 
-    if (e.target.dataset.name === "checkAll") {
-      toggleCheckAll()
+      modifiedMessages = this.state.messages.map((msg, i) => {
+
+       if (checkedStatus[i] === true && dataName === 'markUnread') {
+         msg.read = false
+       } else if (checkedStatus[i] === true && dataName === 'markRead') {
+         msg.read = true
+       }
+        return msg
+      })
     }
 
+    if (dataName === "checkAll") {
+      toggleCheckAll()
+    } else if (dataName === "markUnread" || dataName === "markRead") {
+      readUnread()
+    }
 
     this.setState({modifiedMessages})
   }

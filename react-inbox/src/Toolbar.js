@@ -59,8 +59,8 @@ const Toolbar = (props) => {
         <option value="gschool">gschool</option>
       </select>
 
-      <button onClick = { onTBarClick } className="btn btn-default" disabled={disabled}>
-        <i className="fa fa-trash-o"></i>
+      <button onClick = { onTBarClick } className="btn btn-default" data-name = "trash" disabled={disabled}>
+        <i className="fa fa-trash-o" data-name = "trash"></i>
       </button>
     </div>
   </div>

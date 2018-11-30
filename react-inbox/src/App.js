@@ -129,7 +129,7 @@ class App extends Component {
     let dataValue = e.target.value
     let modifiedMessages
     let checkedStatus = this.state.messages.map((message) => (message.selected))
-
+console.log(dataName);
 
     let toggleCheckAll = () => {
       //let checkAllId = parseInt(e.target.dataset.checkAll)
@@ -159,8 +159,6 @@ class App extends Component {
     }
     let applyRemove = () => {
 
-      //console.log(dataName,dataValue,checkedStatus)
-
       modifiedMessages = this.state.messages.map((msg, i) => {
            console.log('in mod map',checkedStatus[i],dataName,dataValue);
        if (checkedStatus[i] === true && dataName === 'applyLabel' && dataValue === 'dev' ) {
@@ -182,6 +180,12 @@ class App extends Component {
       console.log('after map dataValue',dataValue);
     }
 
+    let trash = () => {
+      console.log('im here');
+      modifiedMessages = this.state.messages.filter((msg, i) =>
+      msg.selected !== true)
+      //creates the correct modifiedMessages to send to state, but when setState is called, it does not change this.state
+    }
 
 
 
@@ -191,9 +195,15 @@ class App extends Component {
       readUnread()
     } else if (dataName === "applyLabel" || dataName === "removeLabel") {
       applyRemove()
+    } else if (dataName === "trash") {
+      trash()
     }
+    // console.log('this.state before',this.state);
+    // console.log('modmess before setstate',modifiedMessages);
 
     this.setState({modifiedMessages})
+    // console.log('this.state post',this.state);
+    // console.log('modmess post setstate',modifiedMessages);
   }
 
   render() {

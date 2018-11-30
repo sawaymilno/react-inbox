@@ -83,9 +83,10 @@ class App extends Component {
 
     let toggleStar = () => {
       let starId = parseInt(e.target.dataset.star)
+      let className = e.target.className
       let value
-      console.log('e.target.dataset.name',e.target.dataset.name);
-      if (e.target.className === "star fa fa-star") {
+      //console.log('e.target.dataset.name',e.target.dataset.name);
+      if (className === "star fa fa-star") {
         value = true
         } else {
         value = false
@@ -98,35 +99,33 @@ class App extends Component {
         return msg
       })
     }
-    // let toggleReadSelected = () => {
-    //   let rowStyle = parseInt(e.target.dataset.rowStyle)
-    //   let read
-    //   let selected
-    //   console.log('e.target.dataset.name',e.target.dataset.name);
-    //   if (rowStyle === "row message read selected") {
-    //     value = 'true'
-    //     } else {
-    //     value = false
-    //   }
-    //   //console.log('[0]starred before',this.state.messages[0].starred);
-    //   modifiedMessages = this.state.messages.map((msg) => {
-    //     if (msg.id === starId) {
-    //       msg.starred = !value
-    //     }
-    //     return msg
-    //   })
-    // }
+    let toggleChecked = () => {
+      let checkedId = parseInt(e.target.dataset.checked)
+      let checked = e.target.checked
+
+      // console.log('e.target.dataset.name',e.target.dataset.name);
+      // console.log('value of checked before', checked);
+      // console.log('[0]selected before',this.state.messages[0].selected);
+
+      modifiedMessages = this.state.messages.map((msg) => {
+        if (msg.id === checkedId) {
+          msg.selected = checked
+        }
+        return msg
+      })
+    }
 
     if (e.target.dataset.name === "starred") {
       toggleStar()
+    } else if (e.target.dataset.name === "selected") {
+      toggleChecked()
     }
 
-    //console.log('modifiedMessages[0].starred',modifiedMessages[0].starred);
     this.setState({modifiedMessages})
   }
 
   render() {
-
+  
     return (<div className="App">
       <Toolbar messages={this.state.messages} />
       <MessageList messages={this.state.messages} manageMessages={ this.manageMessages } />

@@ -2,28 +2,16 @@ import React from 'react';
 
 const Message = ({ id, subject, read, starred, selected, labels, body, manageMessage }) => {
 
-   let rowStyle
-
-   if (read === true && selected === true) {
-     rowStyle = "row message read selected"
-   } else if (read === true && !selected === true) {
-     rowStyle = "row message read"
-   } else if (!read === true && selected === true) {
-     rowStyle = "row message unread selected"
-   } else {
-     rowStyle = "row message unread"
-   }
-
    const onClick = (e) => {
      manageMessage(e)
    }
 
   return (
-    <div data-id={id} data-name="rowStyle" className={rowStyle} onClick={ onClick }   >
+    <div onClick={ onClick } data-id={id} data-name="rowStyle" className={`row message ${read ? "read" : "unread"} ${selected ? "selected" : ""}`}   >
       <div className="col-xs-1">
         <div className="row">
           <div className="col-xs-2">
-            <input type="checkbox" data-checked={id} data-name="selected" checked={ selected }/>
+            <input type="checkbox" onChange={ onClick }  data-checked={id} data-name="selected" checked={ selected ? true : false }/>
           </div>
           <div className="col-xs-2">
             <i data-star={id} data-name="starred" className={ starred ? "star fa fa-star" : "star fa fa-star-o" } ></i>

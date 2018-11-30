@@ -3,7 +3,7 @@ import React from 'react';
 const Toolbar = (props) => {
 
   let unread = props.messages.map((message) => (message.read))
-  let unreadCount = unread.filter(Boolean).length
+  let unreadCount = (props.messages.length - unread.filter(Boolean).length)
   let selected = props.messages.map((message) => (message.selected))
   let selectedCount = selected.filter(Boolean).length
 

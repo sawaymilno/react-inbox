@@ -124,10 +124,38 @@ class App extends Component {
     this.setState({modifiedMessages})
   }
 
+  manageToolbar = (e) => {
+    console.log(e.target.dataset.name);
+
+    let modifiedMessages
+
+    let toggleCheckAll = () => {
+      //let checkAllId = parseInt(e.target.dataset.checkAll)
+      let selected = this.state.messages.map((message) => (message.selected))
+      let selectedCount = selected.filter(Boolean).length
+
+      modifiedMessages = this.state.messages.map((msg) => {
+        if (selectedCount === this.state.messages.length) {
+          msg.selected = false
+        } else {
+          msg.selected = true
+        }
+        return msg
+      })
+    }
+
+    if (e.target.dataset.name === "checkAll") {
+      toggleCheckAll()
+    }
+
+
+    this.setState({modifiedMessages})
+  }
+
   render() {
-  
+
     return (<div className="App">
-      <Toolbar messages={this.state.messages} />
+      <Toolbar messages={this.state.messages} manageToolbar={this.manageToolbar} />
       <MessageList messages={this.state.messages} manageMessages={ this.manageMessages } />
     </div>)
   }

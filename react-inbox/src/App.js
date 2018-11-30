@@ -126,8 +126,10 @@ class App extends Component {
 
   manageToolbar = (e) => {
     let dataName = e.target.dataset.name
+    let dataValue = e.target.value
     let modifiedMessages
-    console.log(dataName);
+    let checkedStatus = this.state.messages.map((message) => (message.selected))
+
 
     let toggleCheckAll = () => {
       //let checkAllId = parseInt(e.target.dataset.checkAll)
@@ -144,8 +146,6 @@ class App extends Component {
       })
     }
     let readUnread = () => {
-      let dataName = e.target.dataset.name
-      let checkedStatus = this.state.messages.map((message) => (message.selected))
 
       modifiedMessages = this.state.messages.map((msg, i) => {
 
@@ -157,11 +157,40 @@ class App extends Component {
         return msg
       })
     }
+    let applyRemove = () => {
+
+      //console.log(dataName,dataValue,checkedStatus)
+
+      modifiedMessages = this.state.messages.map((msg, i) => {
+           console.log('in mod map',checkedStatus[i],dataName,dataValue);
+       if (checkedStatus[i] === true && dataName === 'applyLabel' && dataValue === 'dev' ) {
+         msg.labels[0] = dataValue
+       } else if (checkedStatus[i] === true && dataName === 'applyLabel' && dataValue === 'personal' ) {
+         msg.labels[1] = dataValue
+       } else if (checkedStatus[i] === true && dataName === 'applyLabel' && dataValue === 'gschool' ) {
+         msg.labels[2] = dataValue
+       } else if (checkedStatus[i] === true && dataName === 'removeLabel' && dataValue === 'dev' ) {
+         msg.labels[0] = ""
+       } else if (checkedStatus[i] === true && dataName === 'removeLabel' && dataValue === 'personal' ) {
+         msg.labels[1] = ""
+       } else if (checkedStatus[i] === true && dataName === 'removeLabel' && dataValue === 'gschool' ) {
+         msg.labels[2] = ""
+       }
+        return msg
+      })
+      //want to put a line here to return select back to default state
+      console.log('after map dataValue',dataValue);
+    }
+
+
+
 
     if (dataName === "checkAll") {
       toggleCheckAll()
     } else if (dataName === "markUnread" || dataName === "markRead") {
       readUnread()
+    } else if (dataName === "applyLabel" || dataName === "removeLabel") {
+      applyRemove()
     }
 
     this.setState({modifiedMessages})

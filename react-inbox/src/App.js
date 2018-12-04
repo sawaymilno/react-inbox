@@ -212,16 +212,22 @@ class App extends Component {
         compose = true
       }
       this.setState({...this.state, compose: compose})
-      console.log(compose);
+      console.log('compose',compose);
   }
-  sendMessage = (e) => {
-  console.log('here');
-
-
+  sendMessage = (newMessage) => {
+    if (newMessage.subject === "") {
+      return
+    }
+    console.log('sendMessage', newMessage)
+    this.setState({
+      compose: !this.state.compose,
+      messages: [...this.state.messages, newMessage]
+    })
+    console.log('this.state',this.state);
   }
 
   render() {
-
+console.log(this.state);
     return (<div className="App">
       <Toolbar messages={this.state.messages} manageToolbar={this.manageToolbar} manageCompose={this.manageCompose} />
       {(!this.state.compose) ? null :  <Compose sendMessage={this.sendMessage}/>}

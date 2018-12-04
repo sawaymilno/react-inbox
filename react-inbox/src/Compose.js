@@ -3,7 +3,19 @@ import React from 'react'
 const Compose = (props) => {
 
   const onSubmit = (e) => {
-    props.sendMessage(e)
+    e.preventDefault()
+    let form = e.target
+    let newMessage = {
+      id: Math.floor(Math.random() * 100),
+      subject: form.subject.value,
+      body: form.body.value,
+      labels: [],
+      starred: false,
+      read: false
+    }
+    props.sendMessage(newMessage)
+    form.subject.value=""
+    form.body.value=""
   }
 
   return (

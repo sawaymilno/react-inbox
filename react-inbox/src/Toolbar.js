@@ -25,6 +25,7 @@ const Toolbar = (props) => {
     props.manageToolbar(e)
   }
 
+
   return(
   <div className="row toolbar" >
     <div className="col-md-12">
@@ -32,6 +33,12 @@ const Toolbar = (props) => {
         <span className="badge badge">{unreadCount}</span>
         {(unreadCount === 1) ? "unread message" : "unread messages"}
       </p>
+
+      <a onClick = { onTBarClick } className="btn btn-danger" data-name=
+        "compose" >
+        <i className="fa fa-plus" data-name=
+          "compose" ></i>
+      </a>
 
       <button onClick = { onTBarClick } className="btn btn-default" data-name="checkAll">
         <i className={checkButtonStyle} data-name="checkAll"></i>
@@ -46,7 +53,7 @@ const Toolbar = (props) => {
       </button>
 
       <select onChange ={onTBarClick}  className="form-control label-select" data-name="applyLabel" disabled={disabled}>
-        <option>Apply label</option>
+        <option value = 'apply'>Apply label</option>
         <option value="dev">dev</option>
         <option value="personal">personal</option>
         <option value="gschool">gschool</option>

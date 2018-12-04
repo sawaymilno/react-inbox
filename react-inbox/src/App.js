@@ -125,13 +125,29 @@ class App extends Component {
   }
 
   manageToolbar = (e) => {
+    let className = e.target.className
     let dataName = e.target.dataset.name
     let dataValue = e.target.value
     let modifiedMessages
-    let checkedStatus = this.state.messages.map((message) => (message.selected))
-console.log(dataName);
+    let checkedStatus = this.state.messages.map((message) =>
+        (message.selected))
 
-    let toggleCheckAll = () => {
+    //console.log(dataName);
+
+    let compose = (e) => {
+
+      console.log('in compose',className);
+          modifiedMessages = this.state.messages.map((msg, i) => {
+        if (msg.isHidden) {
+        return  msg.isHidden = false
+        } else {
+        return  msg.isHidden = true
+        }
+
+      })
+      console.log(modifiedMessages.isHidden);
+    }
+    let toggleCheckAll = (e) => {
       //let checkAllId = parseInt(e.target.dataset.checkAll)
       let selected = this.state.messages.map((message) => (message.selected))
       let selectedCount = selected.filter(Boolean).length
@@ -145,7 +161,7 @@ console.log(dataName);
         return msg
       })
     }
-    let readUnread = () => {
+    let readUnread = (e) => {
 
       modifiedMessages = this.state.messages.map((msg, i) => {
 
@@ -157,10 +173,10 @@ console.log(dataName);
         return msg
       })
     }
-    let applyRemove = () => {
+    let applyRemove = (e) => {
 
       modifiedMessages = this.state.messages.map((msg, i) => {
-           console.log('in mod map',checkedStatus[i],dataName,dataValue);
+           // console.log('in mod map',checkedStatus[i],dataName,dataValue);
        if (checkedStatus[i] === true && dataName === 'applyLabel' && dataValue === 'dev' ) {
          msg.labels[0] = dataValue
        } else if (checkedStatus[i] === true && dataName === 'applyLabel' && dataValue === 'personal' ) {
@@ -174,13 +190,13 @@ console.log(dataName);
        } else if (checkedStatus[i] === true && dataName === 'removeLabel' && dataValue === 'gschool' ) {
          msg.labels[2] = ""
        }
+        e.target.selectedIndex = 0
         return msg
       })
-      //want to put a line here to return select back to default state
-      console.log('after map dataValue',dataValue);
-    }
 
-    let trash = () => {
+    //   console.log('after map dataValue',dataValue);
+    // }
+    let trash = (e) => {
       console.log('im here');
       modifiedMessages = this.state.messages.filter((msg, i) =>
       msg.selected !== true)
@@ -190,20 +206,18 @@ console.log(dataName);
 
 
     if (dataName === "checkAll") {
-      toggleCheckAll()
+      toggleCheckAll(e)
     } else if (dataName === "markUnread" || dataName === "markRead") {
-      readUnread()
+      readUnread(e)
     } else if (dataName === "applyLabel" || dataName === "removeLabel") {
-      applyRemove()
+      applyRemove(e)
     } else if (dataName === "trash") {
-      trash()
+      trash(e)
+    } else if (dataName === "compose") {
+      compose(e)
     }
-    // console.log('this.state before',this.state);
-    // console.log('modmess before setstate',modifiedMessages);
 
     this.setState({modifiedMessages})
-    // console.log('this.state post',this.state);
-    // console.log('modmess post setstate',modifiedMessages);
   }
 
   render() {

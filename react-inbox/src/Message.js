@@ -7,13 +7,13 @@ const Message = ({ id, subject, read, starred, selected, labels, body, manageMes
    }
 
   return (
-    <div onClick={ onClick } data-id={id} data-name="rowStyle" className={`row message ${read ? "read" : "unread"} ${selected ? "selected" : ""}`}   >
+    <div  data-id={id} data-name="rowStyle" className={`row message ${read ? "read" : "unread"} ${selected ? "selected" : ""}`}   >
       <div className="col-xs-1">
         <div className="row">
           <div className="col-xs-2">
             <input type="checkbox" onChange={ onClick }  data-checked={id} data-name="selected" checked={ selected ? true : false }/>
           </div>
-          <div className="col-xs-2">
+          <div onClick={ onClick } className="col-xs-2">
             <i data-star={id} data-name="starred" className={ starred ? "star fa fa-star" : "star fa fa-star-o" } ></i>
           </div>
         </div>

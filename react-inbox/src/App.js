@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import './App.css';
 import Toolbar from './Toolbar'
 import MessageList from './MessageList'
-
+import Compose from './Compose'
 
 
 class App extends Component {
@@ -121,9 +121,8 @@ class App extends Component {
       toggleChecked()
     }
 
-    this.setState({modifiedMessages})
+      this.setState({...this.state, messages: modifiedMessages})
   }
-
   manageToolbar = (e) => {
     let className = e.target.className
     let dataName = e.target.dataset.name
@@ -132,21 +131,8 @@ class App extends Component {
     let checkedStatus = this.state.messages.map((message) =>
         (message.selected))
 
-    //console.log(dataName);
+    console.log('dataname',dataName);
 
-    let compose = (e) => {
-
-      console.log('in compose',className);
-          modifiedMessages = this.state.messages.map((msg, i) => {
-        if (msg.isHidden) {
-        return  msg.isHidden = false
-        } else {
-        return  msg.isHidden = true
-        }
-
-      })
-      console.log(modifiedMessages.isHidden);
-    }
     let toggleCheckAll = (e) => {
       //let checkAllId = parseInt(e.target.dataset.checkAll)
       let selected = this.state.messages.map((message) => (message.selected))
@@ -194,8 +180,8 @@ class App extends Component {
         return msg
       })
 
-    //   console.log('after map dataValue',dataValue);
-    // }
+      //   console.log('after map dataValue',dataValue);
+    }
     let trash = (e) => {
       console.log('im here');
       modifiedMessages = this.state.messages.filter((msg, i) =>
@@ -213,17 +199,27 @@ class App extends Component {
       applyRemove(e)
     } else if (dataName === "trash") {
       trash(e)
-    } else if (dataName === "compose") {
-      compose(e)
     }
 
-    this.setState({modifiedMessages})
+    this.setState({...this.state, messages: modifiedMessages})
+  }
+  manageCompose = (e) => {
+    let compose
+      console.log('inside compose', this.state);
+      if (this.state.compose) {
+        compose = false
+      } else {
+        compose = true
+      }
+      this.setState({...this.state, compose: compose})
+      console.log(compose);
   }
 
   render() {
 
     return (<div className="App">
-      <Toolbar messages={this.state.messages} manageToolbar={this.manageToolbar} />
+      <Toolbar messages={this.state.messages} manageToolbar={this.manageToolbar} manageCompose={this.manageCompose} />
+      {(!this.state.compose) ? null :  <Compose />}
       <MessageList messages={this.state.messages} manageMessages={ this.manageMessages } />
     </div>)
   }

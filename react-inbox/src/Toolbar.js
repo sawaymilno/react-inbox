@@ -25,6 +25,10 @@ const Toolbar = (props) => {
     props.manageToolbar(e)
   }
 
+  const onCompose = (e) => {
+    props.manageCompose(e)
+  }
+
 
   return(
   <div className="row toolbar" >
@@ -34,7 +38,7 @@ const Toolbar = (props) => {
         {(unreadCount === 1) ? "unread message" : "unread messages"}
       </p>
 
-      <a onClick = { onTBarClick } className="btn btn-danger" data-name=
+      <a onClick = { onCompose } className="btn btn-danger" data-name=
         "compose" >
         <i className="fa fa-plus" data-name=
           "compose" ></i>

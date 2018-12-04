@@ -22,7 +22,7 @@ const Message = ({ id, subject, read, starred, selected, labels, body, manageMes
         <span data-label0={id} data-name="labels[0]" className="label label-warning">{ labels[0] }</span>
     <span data-label1={id} data-name="labels[1]" className="label label-warning">{ labels[1] }</span>
     <span data-label2={id} data-name="labels[2]" className="label label-warning">{ labels[2] }</span>
-        <a data-subject={id} data-name="subject" href="#">
+        <a data-subject={id} data-name="subject" href="subject">
           {subject}
         </a>
       </div>

@@ -38,11 +38,11 @@ const Toolbar = (props) => {
         {(unreadCount === 1) ? "unread message" : "unread messages"}
       </p>
 
-      <a onClick = { onCompose } className="btn btn-danger" data-name=
+      <button onClick = { onCompose } className="btn btn-danger" data-name=
         "compose" >
         <i className="fa fa-plus" data-name=
           "compose" ></i>
-      </a>
+      </button>
 
       <button onClick = { onTBarClick } className="btn btn-default" data-name="checkAll">
         <i className={checkButtonStyle} data-name="checkAll"></i>

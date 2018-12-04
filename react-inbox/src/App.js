@@ -124,7 +124,7 @@ class App extends Component {
       this.setState({...this.state, messages: modifiedMessages})
   }
   manageToolbar = (e) => {
-    let className = e.target.className
+    //let className = e.target.className
     let dataName = e.target.dataset.name
     let dataValue = e.target.value
     let modifiedMessages
@@ -214,12 +214,17 @@ class App extends Component {
       this.setState({...this.state, compose: compose})
       console.log(compose);
   }
+  sendMessage = (e) => {
+  console.log('here');
+
+
+  }
 
   render() {
 
     return (<div className="App">
       <Toolbar messages={this.state.messages} manageToolbar={this.manageToolbar} manageCompose={this.manageCompose} />
-      {(!this.state.compose) ? null :  <Compose />}
+      {(!this.state.compose) ? null :  <Compose sendMessage={this.sendMessage}/>}
       <MessageList messages={this.state.messages} manageMessages={ this.manageMessages } />
     </div>)
   }

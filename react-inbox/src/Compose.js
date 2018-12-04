@@ -2,8 +2,12 @@ import React from 'react'
 
 const Compose = (props) => {
 
+  const onSubmit = (e) => {
+    props.sendMessage(e)
+  }
+
   return (
-    <div className="compose">
+    <div onSubmit={onSubmit} className="compose">
     <form className="form-horizontal well">
       <div className="form-group">
         <div className="col-sm-8 col-sm-offset-2">

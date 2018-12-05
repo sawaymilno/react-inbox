@@ -6,6 +6,7 @@ const Compose = (props) => {
     e.preventDefault()
     let form = e.target
     let newMessage = {
+      //I'm aware that this "id" isn't sufficient but using it currently to focus on other items.
       id: Math.floor(Math.random() * 100),
       subject: form.subject.value,
       body: form.body.value,

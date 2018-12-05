@@ -4,57 +4,56 @@ import Toolbar from './Toolbar'
 import MessageList from './MessageList'
 import Compose from './Compose'
 
-
 class App extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-    messages: [],
-    compose: false
-  }
-}
-
-getIds = (array) => {
-  let ids = []
-  for (let i = 0; i < array.length; i++) {
-    ids.push(array[i].id)
-  }
-  return ids
-}
-
-patch = async (body) => {
-        body = JSON.stringify(body)
-       return await fetch("http://localhost:8082/api/messages", {
-            method: "PATCH",
-            headers: {
-              'Content-Type': 'application/json',
-              'Accept': 'application/json',
-            },
-            body: body
-          })
+      messages: [],
+      compose: false
     }
+  }
 
-componentDidMount = async () => {
-  const response = await fetch('http://localhost:8082/api/messages')
-  const json = await response.json()
-  this.setState(() => ({messages: json}))
-}
+  componentDidMount = async () => {
+    const response = await fetch('http://localhost:8082/api/messages')
+    const json = await response.json()
+    this.setState(() => ({messages: json}))
+  }
 
-manageMessages = (e) => {
+  getIds = (array) => {
+    let ids = []
+    for (let i = 0; i < array.length; i++) {
+      ids.push(array[i].id)
+    }
+    return ids
+  }
+  patch = async (body) => {
+    body = JSON.stringify(body)
+    return await fetch("http://localhost:8082/api/messages", {
+      method: "PATCH",
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: body
+    })
+  }
+
+  manageMessages = (e) => {
     let modifiedMessages
+    let dataName = e.target.dataset.name
 
     let toggleStar = () => {
       let starId = parseInt(e.target.dataset.star)
       let className = e.target.className
       let value
-      console.log('starId',starId);
+
       if (className === "star fa fa-star") {
         value = true
         } else {
         value = false
       }
-      //console.log('[0]starred before',this.state.messages[0].starred);
+
       modifiedMessages = this.state.messages.map((msg) => {
         if (msg.id === starId) {
           msg.starred = !value
@@ -62,13 +61,9 @@ manageMessages = (e) => {
         return msg
       })
 
-      this.patch({
-        "messageIds": [starId],
-        "command": "star"
-      })
+      this.patch({"messageIds": [starId], "command": "star"})
 
     }
-
     let toggleChecked = () => {
       let checkedId = parseInt(e.target.dataset.checked)
       let checked = e.target.checked
@@ -81,25 +76,28 @@ manageMessages = (e) => {
       })
     }
 
-    if (e.target.dataset.name === "starred") {
-      toggleStar()
-    } else if (e.target.dataset.name === "selected") {
-      toggleChecked()
+    switch (dataName) {
+      case 'starred':
+        toggleStar()
+        break;
+      case 'selected':
+        toggleChecked()
+        break;
+      default:
+      break;
     }
 
-      //this.setState({...this.state, messages: modifiedMessages})
-      this.setState(() =>({...this.state, messages: modifiedMessages}))
-  }
+    this.setState(() => ({
+      ...this.state,
+      messages: modifiedMessages
+    }))
 
-manageToolbar = (e) => {
+  }
+  manageToolbar = (e) => {
+    let modifiedMessages
     let dataName = e.target.dataset.name
     let dataValue = e.target.value
-    let modifiedMessages
-
-    let selected = this.state.messages.map((message) =>
-        (message.selected))
-
-    console.log('dataname',dataName);
+    let selected = this.state.messages.map((message) => (message.selected))
 
     let toggleCheckAll = (e) => {
 
@@ -119,110 +117,133 @@ manageToolbar = (e) => {
 
       modifiedMessages = this.state.messages.map((msg, i) => {
 
-       if (selected[i] === true && dataName === 'markUnread') {
-         msg.read = false
-       } else if (selected[i] === true && dataName === 'markRead') {
-         msg.read = true
-       }
+        if (selected[i] === true && dataName === 'markUnread') {
+          msg.read = false
+        } else if (selected[i] === true && dataName === 'markRead') {
+          msg.read = true
+        }
         return msg
       })
 
       let checked = this.state.messages.filter(msg => msg.selected)
       let ids = this.getIds(checked)
-      console.log('checked',checked,'ids',ids);
       let read
-      if (dataName === 'markRead') {
-        read = true
-      } else {
-        read = false
+
+      switch(dataName) {
+        case 'markRead':
+          read = true
+          break;
+        default:
+          read = false
       }
-      this.patch({
-            "messageIds": ids,
-            "command": "read",
-            "read": read
-        })
+
+      this.patch({"messageIds": ids, "command": "read", "read": read})
 
     }
     let applyRemove = (e) => {
 
       modifiedMessages = this.state.messages.map((msg, i) => {
-           // console.log('in mod map',selected[i],dataName,dataValue);
-       if (selected[i] === true && dataName === 'addLabel' && dataValue === 'dev' ) {
-         msg.labels[0] = dataValue
-       } else if (selected[i] === true && dataName === 'addLabel' && dataValue === 'personal' ) {
-         msg.labels[1] = dataValue
-       } else if (selected[i] === true && dataName === 'addLabel' && dataValue === 'gschool' ) {
-         msg.labels[2] = dataValue
-       } else if (selected[i] === true && dataName === 'removeLabel' && dataValue === 'dev' ) {
-         msg.labels[0] = ""
-       } else if (selected[i] === true && dataName === 'removeLabel' && dataValue === 'personal' ) {
-         msg.labels[1] = ""
-       } else if (selected[i] === true && dataName === 'removeLabel' && dataValue === 'gschool' ) {
-         msg.labels[2] = ""
-       }
+
+        switch (true) {
+          case ((selected[i] === true) && (dataName === 'addLabel')):
+            switch(dataValue){
+              case 'dev':
+                msg.labels[0] = dataValue
+                break;
+              case 'personal':
+                msg.labels[1] = dataValue
+                break;
+              case 'gschool':
+                msg.labels[2] = dataValue
+                break;
+              default:
+              break;
+            }
+            break;
+          case ((selected[i] === true) && (dataName === 'removeLabel')):
+            switch(dataValue){
+              case 'dev':
+                msg.labels[0] = ''
+                break;
+              case 'personal':
+                msg.labels[1] = ''
+                break;
+              case 'gschool':
+                msg.labels[2] = ''
+                break;
+                default:
+                break;
+            }
+            break;
+          default:
+          break;
+        }
+
         e.target.selectedIndex = 0
+
         return msg
       })
-
-      // let command
-      //
-      // if (dataName === 'addLabel') {
-      //   command = 'addLabel'
-      // } else {
-      //   command = 'removeLabel'
-      // }
 
       this.patch({
         "messageIds": this.state.messages.filter(message => message.selected).map(message => message.id),
         "command": dataName,
         "label": dataValue
-        })
+      })
 
-      //   console.log('after map dataValue',dataValue);
     }
-
     let trash = (e) => {
       let deleted = this.state.messages.filter(msg => msg.selected)
       let ids = this.getIds(deleted)
 
       modifiedMessages = this.state.messages.filter(msg => !msg.selected)
-      this.patch({
-            "messageIds": ids,
-            "command": "delete"
-        })
-
-      //console.log('trash event', ids);
-      //console.log('post patch', modifiedMessages);
-
+      this.patch({"messageIds": ids, "command": "delete"})
 
     }
 
-    if (dataName === "checkAll") {
-      toggleCheckAll(e)
-      } else if (dataName === "markUnread" || dataName === "markRead") {
-      readUnread(e)
-      } else if (dataName === "addLabel" || dataName === "removeLabel") {
-      applyRemove(e)
-      } else if (dataName === "trash") {
-      trash(e)
+    switch (dataName) {
+      case 'checkAll':
+        toggleCheckAll(e)
+        break;
+      case 'markUnread':
+        readUnread(e)
+        break;
+      case 'markRead':
+        readUnread(e)
+        break;
+      case 'addLabel':
+        applyRemove(e)
+        break;
+      case 'removeLabel':
+        applyRemove(e)
+        break;
+      case 'trash':
+        trash(e)
+        break;
+      default:
+      break;
     }
 
-    this.setState(() =>({...this.state, messages: modifiedMessages}))
+    this.setState(() => ({
+      ...this.state,
+      messages: modifiedMessages
+    }))
   }
-
-manageCompose = (e) => {
+  manageCompose = (e) => {
     let compose
-      console.log('inside compose', this.state);
-      if (this.state.compose) {
-        compose = false
-      } else {
-        compose = true
-      }
-      this.setState(() =>({...this.state, compose: compose}))
-      console.log('compose',compose);
-  }
 
-sendMessage = async (newMessage) => {
+    if (this.state.compose) {
+      compose = false
+      } else {
+      compose = true
+    }
+
+    this.setState(() => ({
+      ...this.state,
+      compose: compose
+    }))
+
+  }
+  sendMessage = async (newMessage) => {
     if (newMessage.subject === "") {
       return
     }
@@ -232,31 +253,32 @@ sendMessage = async (newMessage) => {
       body: JSON.stringify(newMessage),
       headers: {
         'Content-Type': 'application/json',
-        'Accept': 'application/json',
+        'Accept': 'application/json'
       }
     })
-
     const message = await response.json()
 
-    console.log('sendMessage', newMessage)
-
-    this.setState(() =>({
-
+    this.setState(() => ({
       compose: !this.state.compose,
-      messages: [...this.state.messages, message]
+      messages: [
+        ...this.state.messages,
+        message
+      ]
     }))
-    console.log('this.state',this.state);
-  }
 
+  }
 
   render() {
 
-  console.log(this.state);
+    console.log(this.state);
 
     return (<div className="App">
-      <Toolbar messages={this.state.messages} manageToolbar={this.manageToolbar} manageCompose={this.manageCompose} />
-      {(!this.state.compose) ? null :  <Compose sendMessage={this.sendMessage}/>}
-      <MessageList messages={this.state.messages} manageMessages={ this.manageMessages } />
+      <Toolbar messages={this.state.messages} manageToolbar={this.manageToolbar} manageCompose={this.manageCompose}/> {
+        (!this.state.compose)
+          ? null
+          : <Compose sendMessage={this.sendMessage}/>
+      }
+      <MessageList messages={this.state.messages} manageMessages={this.manageMessages}/>
     </div>)
   }
 }

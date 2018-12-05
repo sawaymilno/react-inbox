@@ -10,15 +10,18 @@ const Toolbar = (props) => {
   let checkButtonStyle
   let disabled
 
-  if (selectedCount === 0) {
-    checkButtonStyle = "fa fa-square-o"
-    disabled = "disabled"
-    } else if (selectedCount === props.messages.length) {
-    checkButtonStyle = "fa fa-check-square-o"
-    disabled = ""
-    } else {
-    checkButtonStyle = "fa fa-minus-square-o"
-    disabled = ""
+  switch (selectedCount) {
+    case 0:
+      checkButtonStyle = "fa fa-square-o"
+      disabled = "disabled"
+      break;
+    case props.messages.length:
+      checkButtonStyle = "fa fa-check-square-o"
+      disabled = ""
+      break;
+    default:
+      checkButtonStyle = "fa fa-minus-square-o"
+      disabled = ""
   }
 
   const onTBarClick = (e) => {
@@ -28,7 +31,6 @@ const Toolbar = (props) => {
   const onCompose = (e) => {
     props.manageCompose(e)
   }
-
 
   return(
   <div className="row toolbar" >

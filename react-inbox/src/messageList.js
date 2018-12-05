@@ -5,10 +5,9 @@ const MessageList = (props) => {
 
   return (
     <div className='list-group-item'>
-        {/* <Message manageMessages={props.manageMessages}/> */}
+
         {props.messages.map((message, i) => {
 
-          //console.log('Inside map props', props)
           return (<Message
             key={i}
             id={message.id}
@@ -21,10 +20,8 @@ const MessageList = (props) => {
             manageMessage={props.manageMessages}
             />)
       }
-
     )}
     </div>
-
   )
 }
 

@@ -14,6 +14,7 @@ const Compose = (props) => {
       starred: false,
       read: false
     }
+
     props.sendMessage(newMessage)
     form.subject.value=""
     form.body.value=""

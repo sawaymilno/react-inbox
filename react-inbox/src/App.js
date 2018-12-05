@@ -15,10 +15,10 @@ class App extends Component {
   }
 }
 
-getIds = (input) => {
+getIds = (array) => {
   let ids = []
-  for (let i = 0; i < input.length; i++) {
-    ids.push(input[i].id)
+  for (let i = 0; i < array.length; i++) {
+    ids.push(array[i].id)
   }
   return ids
 }
@@ -48,7 +48,7 @@ manageMessages = (e) => {
       let starId = parseInt(e.target.dataset.star)
       let className = e.target.className
       let value
-      //console.log('e.target.dataset.name',e.target.dataset.name);
+      console.log('starId',starId);
       if (className === "star fa fa-star") {
         value = true
         } else {
@@ -61,7 +61,14 @@ manageMessages = (e) => {
         }
         return msg
       })
+
+      this.patch({
+        "messageIds": [starId],
+        "command": "star"
+      })
+
     }
+
     let toggleChecked = () => {
       let checkedId = parseInt(e.target.dataset.checked)
       let checked = e.target.checked
@@ -88,7 +95,8 @@ manageToolbar = (e) => {
     let dataName = e.target.dataset.name
     let dataValue = e.target.value
     let modifiedMessages
-    let checkedStatus = this.state.messages.map((message) =>
+
+    let selected = this.state.messages.map((message) =>
         (message.selected))
 
     console.log('dataname',dataName);
@@ -111,60 +119,89 @@ manageToolbar = (e) => {
 
       modifiedMessages = this.state.messages.map((msg, i) => {
 
-       if (checkedStatus[i] === true && dataName === 'markUnread') {
+       if (selected[i] === true && dataName === 'markUnread') {
          msg.read = false
-       } else if (checkedStatus[i] === true && dataName === 'markRead') {
+       } else if (selected[i] === true && dataName === 'markRead') {
          msg.read = true
        }
         return msg
       })
+
+      let checked = this.state.messages.filter(msg => msg.selected)
+      let ids = this.getIds(checked)
+      console.log('checked',checked,'ids',ids);
+      let read
+      if (dataName === 'markRead') {
+        read = true
+      } else {
+        read = false
+      }
+      this.patch({
+            "messageIds": ids,
+            "command": "read",
+            "read": read
+        })
+
     }
     let applyRemove = (e) => {
 
       modifiedMessages = this.state.messages.map((msg, i) => {
-           // console.log('in mod map',checkedStatus[i],dataName,dataValue);
-       if (checkedStatus[i] === true && dataName === 'applyLabel' && dataValue === 'dev' ) {
+           // console.log('in mod map',selected[i],dataName,dataValue);
+       if (selected[i] === true && dataName === 'addLabel' && dataValue === 'dev' ) {
          msg.labels[0] = dataValue
-       } else if (checkedStatus[i] === true && dataName === 'applyLabel' && dataValue === 'personal' ) {
+       } else if (selected[i] === true && dataName === 'addLabel' && dataValue === 'personal' ) {
          msg.labels[1] = dataValue
-       } else if (checkedStatus[i] === true && dataName === 'applyLabel' && dataValue === 'gschool' ) {
+       } else if (selected[i] === true && dataName === 'addLabel' && dataValue === 'gschool' ) {
          msg.labels[2] = dataValue
-       } else if (checkedStatus[i] === true && dataName === 'removeLabel' && dataValue === 'dev' ) {
+       } else if (selected[i] === true && dataName === 'removeLabel' && dataValue === 'dev' ) {
          msg.labels[0] = ""
-       } else if (checkedStatus[i] === true && dataName === 'removeLabel' && dataValue === 'personal' ) {
+       } else if (selected[i] === true && dataName === 'removeLabel' && dataValue === 'personal' ) {
          msg.labels[1] = ""
-       } else if (checkedStatus[i] === true && dataName === 'removeLabel' && dataValue === 'gschool' ) {
+       } else if (selected[i] === true && dataName === 'removeLabel' && dataValue === 'gschool' ) {
          msg.labels[2] = ""
        }
         e.target.selectedIndex = 0
         return msg
       })
 
+      // let command
+      //
+      // if (dataName === 'addLabel') {
+      //   command = 'addLabel'
+      // } else {
+      //   command = 'removeLabel'
+      // }
+
+      this.patch({
+        "messageIds": this.state.messages.filter(message => message.selected).map(message => message.id),
+        "command": dataName,
+        "label": dataValue
+        })
+
       //   console.log('after map dataValue',dataValue);
     }
-    let trash = (e) => {
-      let deleted = this.state.messages.filter((msg,i) =>
-    msg.selected === true)
-    let ids = this.getIds(deleted)
 
-      // modifiedMessages = this.state.messages.filter((msg, i) =>
-      // msg.selected !== true)
-      modifiedMessages = this.patch({
+    let trash = (e) => {
+      let deleted = this.state.messages.filter(msg => msg.selected)
+      let ids = this.getIds(deleted)
+
+      modifiedMessages = this.state.messages.filter(msg => !msg.selected)
+      this.patch({
             "messageIds": ids,
             "command": "delete"
         })
 
-      console.log('trash event', ids);
-      console.log('post patch', modifiedMessages);
+      //console.log('trash event', ids);
+      //console.log('post patch', modifiedMessages);
 
 
-  }
+    }
 
     if (dataName === "checkAll") {
       toggleCheckAll(e)
       } else if (dataName === "markUnread" || dataName === "markRead") {
       readUnread(e)
-      } else if (dataName === "applyLabel" || dataName === "removeLabel") {
+      } else if (dataName === "addLabel" || dataName === "removeLabel") {
       applyRemove(e)
       } else if (dataName === "trash") {
       trash(e)

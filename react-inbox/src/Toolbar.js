@@ -56,7 +56,7 @@ const Toolbar = (props) => {
         Mark As Unread
       </button>
 
-      <select onChange ={onTBarClick}  className="form-control label-select" data-name="applyLabel" disabled={disabled}>
+      <select onChange ={onTBarClick}  className="form-control label-select" data-name="addLabel" disabled={disabled}>
         <option value = 'apply'>Apply label</option>
         <option value="dev">dev</option>
         <option value="personal">personal</option>
